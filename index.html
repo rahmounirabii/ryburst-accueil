@@ -220,8 +220,10 @@
     background: var(--bleu); transition: transform .2s ease-out, box-shadow .2s ease-out;
   }
   .tile:hover { color: #fff; transform: translateY(-4px); box-shadow: var(--shadow-lift); }
-  .tile::after { content: ""; position: absolute; inset: 0; background: rgba(255, 255, 255, 0); transition: background-color .2s ease-out; pointer-events: none; }
-  .tile:hover::after { background: rgba(255, 255, 255, .06); }
+  .tile > * { position: relative; z-index: 2; }
+  .tile .bg { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; mix-blend-mode: luminosity; transform: scale(1.01); transition: transform .6s var(--ease), opacity .3s ease-out; }
+  .tile:hover .bg { transform: scale(1.05); opacity: .62; }
+  .tile::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(16, 24, 32, .55), rgba(16, 24, 32, 0) 60%); transition: opacity .2s ease-out; pointer-events: none; }
   .tile--onyx { background: var(--onyx); }
   .tile--violet { background: var(--violet); }
   .tile--featured { grid-column: span 2; }
@@ -232,7 +234,7 @@
   .tile--featured .title { font-size: 24px; }
   .tile .desc { font-size: 14px; line-height: 1.5; color: var(--perle); max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s var(--ease), opacity .3s var(--ease); }
   .tile:hover .desc, .tile:focus-visible .desc { max-height: 80px; opacity: 1; }
-  .tile .motif { position: absolute; right: 24px; top: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
+  .tile .motif { position: absolute; z-index: 2; right: 24px; top: 16px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
   .tile .motif .aa { font-weight: 700; font-size: 120px; line-height: 1; letter-spacing: -0.04em; color: rgba(255, 255, 255, .14); }
   .tile .motif .sw { display: flex; gap: 8px; }
   .tile .motif .sw i { width: 14px; height: 14px; border-radius: 999px; display: block; border: 1.5px solid rgba(255, 255, 255, .5); }
@@ -248,7 +250,9 @@
   .center { display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; margin-bottom: 48px; }
   .cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
   .case-featured { display: grid; gap: 20px; align-content: start; }
-  .media { position: relative; border-radius: 16px; background: var(--bleu); aspect-ratio: 4 / 3; max-width: 100%; }
+  .media { position: relative; border-radius: 16px; background: var(--bleu); aspect-ratio: 4 / 3; max-width: 100%; overflow: hidden; }
+  .media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+  .case-featured:hover .media img, .card:hover .media img { transform: scale(1.04); }
   .media--onyx { background: var(--onyx); }
   .media--violet { background: var(--violet); }
   .media--lavande { background: var(--lavande); }
@@ -308,10 +312,12 @@
   .card .meta { font-size: 14px; color: var(--ardoise); }
 
   /* ---------- Carrières ---------- */
-  .career { position: relative; background: var(--onyx); color: #fff; border-radius: 24px; padding: 48px; min-height: 320px; display: grid; align-content: center; gap: 24px; margin-top: 32px; }
+  .career { position: relative; background: var(--onyx); color: #fff; border-radius: 24px; padding: 48px; min-height: 360px; display: grid; align-content: center; gap: 24px; margin-top: 32px; overflow: hidden; }
+  .career > * { position: relative; z-index: 1; }
+  .career .bg { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; opacity: .38; }
+  .career::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(90deg, rgba(16, 24, 32, .92) 0%, rgba(16, 24, 32, .55) 55%, rgba(16, 24, 32, .2) 100%); }
   .career p { color: #fff; font-size: 24px; line-height: 1.3; font-weight: 600; max-width: 22em; }
   .career .btn { justify-self: start; }
-  .career .ph { left: auto; right: 24px; bottom: 24px; }
 
   /* ---------- Double bannière ---------- */
   .duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -537,6 +543,7 @@
       </div>
       <div class="tiles" id="tiles">
         <a class="tile tile--violet tile--featured" href="#expertises" style="--i:0">
+          <img class="bg" src="img/exp-design.webp" alt="Designer travaillant sur une tablette graphique avec des nuanciers" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 10-10-3-3L5 16l-1 4z"></path><path d="M13 7l3 3"></path></svg>
           <div class="motif" aria-hidden="true">
             <div class="aa">Aa</div>
@@ -548,6 +555,7 @@
           </div>
         </a>
         <a class="tile" href="#expertises" style="--i:1">
+          <img class="bg" src="img/exp-ia.webp" alt="Points lumineux bleus formant des vagues abstraites" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><circle cx="5" cy="6" r="2"></circle><circle cx="19" cy="6" r="2"></circle><circle cx="5" cy="18" r="2"></circle><circle cx="19" cy="18" r="2"></circle><path d="M9.8 10.2L6.4 7.4M14.2 10.2l3.4-2.8M9.8 13.8l-3.4 2.8M14.2 13.8l3.4 2.8"></path></svg>
           <div class="body">
             <div class="title">Intelligence artificielle</div>
@@ -555,6 +563,7 @@
           </div>
         </a>
         <a class="tile tile--onyx" href="#expertises" style="--i:2">
+          <img class="bg" src="img/exp-transfo.webp" alt="Équipe en réunion de travail dans un bureau lumineux" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-6 4 4 6-8"></path><path d="M14 7h6v6"></path></svg>
           <div class="body">
             <div class="title">Transformation digitale &amp; Stratégie</div>
@@ -562,6 +571,7 @@
           </div>
         </a>
         <a class="tile tile--onyx" href="#expertises" style="--i:3">
+          <img class="bg" src="img/exp-data.webp" alt="Graphiques d'analyse sur un écran d'ordinateur portable" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>
           <div class="body">
             <div class="title">Data &amp; Company Brain</div>
@@ -569,6 +579,7 @@
           </div>
         </a>
         <a class="tile" href="#expertises" style="--i:4">
+          <img class="bg" src="img/exp-plateformes.webp" alt="Écran d'ordinateur affichant du code" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 4v5"></path></svg>
           <div class="body">
             <div class="title">Plateformes &amp; Applications</div>
@@ -576,6 +587,7 @@
           </div>
         </a>
         <a class="tile tile--onyx" href="#expertises" style="--i:5">
+          <img class="bg" src="img/exp-marque.webp" alt="Bureau de designer avec crayons et échantillons de couleurs" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l14-6v14L4 13v-2z"></path><path d="M7 13v5"></path></svg>
           <div class="body">
             <div class="title">Marque &amp; Croissance digitale</div>
@@ -583,6 +595,7 @@
           </div>
         </a>
         <a class="tile" href="#expertises" style="--i:6">
+          <img class="bg" src="img/exp-formation.webp" alt="Groupe de personnes réunies pour une formation" loading="lazy" decoding="async">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h7a2 2 0 012 2v13a2 2 0 00-2-2H3V5z"></path><path d="M21 5h-7a2 2 0 00-2 2v13a2 2 0 012-2h7V5z"></path></svg>
           <div class="body">
             <div class="title">Formation &amp; Adoption</div>
@@ -614,7 +627,7 @@
       </div>
       <div class="cases">
         <a class="case-featured" href="#realisations">
-          <div class="media"><span class="ph">[Photo de la réalisation]</span></div>
+          <div class="media"><img src="img/real-1.webp" alt="Rue commerçante animée au Maroc" loading="lazy" decoding="async"></div>
           <span class="kicker">Réalisation</span>
           <h3>[Réalisation 1&nbsp;: secteur, problème résolu, résultat chiffré]</h3>
           <span class="link">Lire la réalisation</span>
@@ -716,7 +729,7 @@
       </div>
       <div class="cards">
         <a class="card" href="#insights">
-          <div class="media media--onyx"><span class="ph">[Visuel]</span></div>
+          <div class="media media--onyx"><img src="img/insight-1.webp" alt="Sphère abstraite de points et de lignes" loading="lazy" decoding="async"></div>
           <div class="body">
             <span class="kicker">Parole d'experts</span>
             <h3>[Insight 1&nbsp;: l'IA générative dans une PME, par où commencer]</h3>
@@ -724,7 +737,7 @@
           </div>
         </a>
         <a class="card" href="#insights">
-          <div class="media"><span class="ph">[Visuel]</span></div>
+          <div class="media"><img src="img/insight-2.webp" alt="Schémas dessinés sur un tableau en verre" loading="lazy" decoding="async"></div>
           <div class="body">
             <span class="kicker">Méthode</span>
             <h3>[Insight 2&nbsp;: le Company Brain, sept fonctions et une source de vérité]</h3>
@@ -732,7 +745,7 @@
           </div>
         </a>
         <a class="card" href="#insights">
-          <div class="media media--violet"><span class="ph">[Visuel]</span></div>
+          <div class="media media--violet"><img src="img/insight-3.webp" alt="Casablanca, avec la mosquée Hassan II en arrière-plan" loading="lazy" decoding="async"></div>
           <div class="body">
             <span class="kicker">Marché</span>
             <h3>[Insight 3&nbsp;: WhatsApp Business comme canal de vente au Maroc]</h3>
@@ -747,9 +760,9 @@
     <div class="wrap">
       <h2 id="h-car">Construisez votre carrière avec Ryburst.</h2>
       <div class="career">
+        <img class="bg" src="img/carrieres.webp" alt="Personnes travaillant dans un bureau moderne" loading="lazy" decoding="async">
         <p>Consultants, développeurs, designers, data&nbsp;: rejoignez une équipe qui livre de bout en bout.</p>
         <a class="btn btn--primary" href="#carrieres">Voir les postes ouverts</a>
-        <span class="ph">[Photo : l'équipe au travail]</span>
       </div>
     </div>
   </section>
