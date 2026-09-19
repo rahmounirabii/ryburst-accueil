@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rahmounirabii.github.io/ryburst-accueil/sitemap.xml
