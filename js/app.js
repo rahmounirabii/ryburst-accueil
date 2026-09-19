@@ -98,6 +98,18 @@ if (!im.complete || !im.naturalWidth) { im.loading = 'eager'; if (!im.currentSrc
 });
 }, { rootMargin: '600px 0px' });
 $$('img[loading="lazy"]').forEach(function (im) { if (!im.complete || !im.naturalWidth) oImg.observe(im); });
+/* Les sections différées par content-visibility ne donnent pas de boîte à leurs
+images : on observe la section elle-même, qui garde sa taille intrinsèque. */
+var oSec = new IntersectionObserver(function (es) {
+es.forEach(function (e) {
+if (!e.isIntersecting) return;
+oSec.unobserve(e.target);
+$$('img[loading="lazy"]', e.target).forEach(function (im) {
+if (!im.complete || !im.naturalWidth) im.loading = 'eager';
+});
+});
+}, { rootMargin: '800px 0px' });
+$$('main > section, footer').forEach(function (sec) { oSec.observe(sec); });
 }
 addEventListener('load', function () {
 setTimeout(function () { $$('.rev:not(.vu)').forEach(function (el) { el.classList.add('vu'); }); }, 2500);
