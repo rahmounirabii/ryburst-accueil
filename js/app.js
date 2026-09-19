@@ -84,6 +84,9 @@ $$('.rev').forEach(function (el) { oRev.observe(el); });
 } else {
 $$('.rev').forEach(function (el) { el.classList.add('vu'); });
 }
+addEventListener('load', function () {
+setTimeout(function () { $$('.rev:not(.vu)').forEach(function (el) { el.classList.add('vu'); }); }, 2500);
+}, { once: true });
 function uneFois(el, cb) {
 if (!el) return;
 if (!('IntersectionObserver' in window)) { cb(el); return; }
