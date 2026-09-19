@@ -84,6 +84,21 @@ $$('.rev').forEach(function (el) { oRev.observe(el); });
 } else {
 $$('.rev').forEach(function (el) { el.classList.add('vu'); });
 }
+/* ---- Images différées : on garantit le chargement à l'approche du cadre ----
+Le chargement natif « lazy » de Chrome ne se déclenche pas toujours après un
+défilement programmatique ou un changement de mise en page. Cet observateur
+bascule l'image en chargement immédiat 600 px avant qu'elle entre dans l'écran. */
+if ('IntersectionObserver' in window) {
+var oImg = new IntersectionObserver(function (es) {
+es.forEach(function (e) {
+if (!e.isIntersecting) return;
+var im = e.target;
+oImg.unobserve(im);
+if (!im.complete || !im.naturalWidth) { im.loading = 'eager'; if (!im.currentSrc) im.src = im.src; }
+});
+}, { rootMargin: '600px 0px' });
+$$('img[loading="lazy"]').forEach(function (im) { if (!im.complete || !im.naturalWidth) oImg.observe(im); });
+}
 addEventListener('load', function () {
 setTimeout(function () { $$('.rev:not(.vu)').forEach(function (el) { el.classList.add('vu'); }); }, 2500);
 }, { once: true });
